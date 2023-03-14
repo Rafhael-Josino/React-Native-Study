@@ -6,6 +6,8 @@ import {
   TextInput,
   TouchableOpacity
 } from 'react-native';
+import Button from '../components/Button';
+import Card from '../components/Card';
 
 function Home() {
   const [newStuff, setNewStuff] = useState("Potato");
@@ -25,31 +27,13 @@ function Home() {
       onChangeText={setNewStuff}
     />
 
-    <TouchableOpacity 
-      style={styles.button} 
-      activeOpacity={.7}
-      onPress={setMyStuffHandler}
-    >
-      <Text style={styles.buttonText}>
-        Add a new stuff
-      </Text>
-    </TouchableOpacity>
+    <Button setMyStuffHandler={setMyStuffHandler} />
 
     <Text style={[styles.title, {marginVertical: 50}]}>
       My Stuff
     </Text>
 
-    {
-      myStuff.map((stuff, index) => <TouchableOpacity 
-          style={styles.buttonStuff}
-          key={index}
-        >
-          <Text style={styles.stuffs}>
-            {stuff}
-          </Text>
-        </TouchableOpacity>
-      )
-    }
+    <Card myStuff={myStuff} />
   </View>
 }
 
@@ -73,28 +57,6 @@ const styles = StyleSheet.create({
     marginTop: 30,
     borderRadius: 7,
   },
-  button: {
-    backgroundColor: '#a370f7',
-    padding: 15,
-    borderRadius: 7,
-    alignItems: 'center',
-    marginTop: 20,
-  },
-  buttonText: {
-    color: '#fff'
-  },
-  buttonStuff: {
-    backgroundColor: '#1f1e25',
-    padding: 15,
-    borderRadius: 50,
-    alignItems: 'center',
-    marginBottom: 5,
-  },
-  stuffs: {
-    color: '#fff',
-    fontSize: 22,
-    fontWeight: 'bold',
-  }
-})
+});
 
 export default Home;
