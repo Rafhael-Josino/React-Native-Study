@@ -2,7 +2,8 @@ import React from 'react';
 import {
     Text,
     TouchableOpacity, 
-    StyleSheet 
+    StyleSheet,
+    FlatList,
 } from 'react-native';
 
 type Props = {
@@ -12,17 +13,19 @@ type Props = {
 function Card(props: Props) {
     const { myStuff } = props;
 
-    const renderedStuff = myStuff.map((stuff, index) => <TouchableOpacity 
-                style={styles.buttonStuff}
-                key={index}
-            >
-            <Text style={styles.stuffs}>
-                {stuff}
-            </Text>
-        </TouchableOpacity>
-    );
+    const renderedStuff = (stuff: string) => <TouchableOpacity 
+        style={styles.buttonStuff}
+    >
+        <Text style={styles.stuffs}>
+            {stuff}
+        </Text>
+    </TouchableOpacity>
 
-    return <>{renderedStuff}</>
+    return <FlatList
+        data={myStuff}
+        keyExtractor={item => item}
+        renderItem={({ item }) => renderedStuff(item) }
+    />
 }
 
 const styles = StyleSheet.create({
