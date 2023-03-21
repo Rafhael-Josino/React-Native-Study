@@ -2,25 +2,28 @@ import React from "react";
 import {
     Text,
     TouchableOpacity,
+    TouchableOpacityProps,
     StyleSheet,
 } from 'react-native';
+
+interface MyButtonType extends TouchableOpacityProps {
+  title: string,
+}
 
 type Props = {
     setMyStuffHandler: () => void,
 }
 
-function Button(props: Props) {
-    const { setMyStuffHandler } = props;
-
+function Button({ title, ...rest }: MyButtonType) {
     return <TouchableOpacity 
-    style={styles.button} 
-    activeOpacity={.7}
-    onPress={setMyStuffHandler}
-  >
-    <Text style={styles.buttonText}>
-      Add a new stuff
-    </Text>
-  </TouchableOpacity>
+      style={styles.button} 
+      activeOpacity={0.7}
+      {...rest}
+    >
+      <Text style={styles.buttonText}>
+        {title}
+      </Text>
+    </TouchableOpacity>
 }
 
 const styles = StyleSheet.create({

@@ -5,17 +5,30 @@ import {
   StyleSheet, 
   TextInput,
   TouchableOpacity,
+  FlatList,
 } from 'react-native';
 import Button from '../components/Button';
-import Cards from '../components/CardList';
+import Card from '../components/Card';
+import { StuffType } from "../types";
 
 function Home() {
-  const [newStuff, setNewStuff] = useState("Potato");
-  const [myStuff, setMyStuff] = useState(["Potato"]);
+  const [newStuff, setNewStuff] = useState('');
+  const [myStuff, setMyStuff] = useState<StuffType[]>([]);
   const [greeting, setGreeting] = useState('');
 
-  const setMyStuffHandler = () => {
-    setMyStuff(oldStuff => [...oldStuff, newStuff]);
+  const addStuffHandler = () => {
+    const data = {
+      id: String(new Date().getTime()),
+      name: newStuff,
+    }
+
+    console.log('this is a test');
+
+    setMyStuff(oldStuff => [...oldStuff, data]);
+  }
+
+  const removeStuffHandler = (id: string) => {
+    setMyStuff(oldStuff => oldStuff.filter(stuff => stuff.id !== id))
   }
 
   useEffect(() => {
@@ -44,13 +57,24 @@ function Home() {
       onChangeText={setNewStuff}
     />
 
-    <Button setMyStuffHandler={setMyStuffHandler} />
+    <Button 
+      onPress={addStuffHandler}
+      title='Add new stuff!'
+    />
 
     <Text style={[styles.title, {marginVertical: 50}]}>
       My Stuff
     </Text>
 
-    <Cards myStuff={myStuff} />
+    <FlatList
+      data={myStuff}
+      keyExtractor={item => item.id}
+      renderItem={({ item }) => <Card
+          name={item.name}
+          onPress={() => removeStuffHandler(item.id)}
+        />
+      }
+    />
   </View>
 }
 

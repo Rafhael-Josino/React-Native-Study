@@ -1,31 +1,26 @@
 import React from 'react';
 import {
     Text,
-    TouchableOpacity, 
+    TouchableOpacity,
+    TouchableOpacityProps,
     StyleSheet,
     FlatList,
 } from 'react-native';
+import { StuffType } from '../types';
 
-type Props = {
-    myStuff: string[],
+interface CardType extends TouchableOpacityProps {
+    name: string,
 }
 
-function Card(props: Props) {
-    const { myStuff } = props;
-
-    const renderedStuff = (stuff: string) => <TouchableOpacity 
+function Card({ name, ...rest }: CardType) {
+    return <TouchableOpacity 
         style={styles.buttonStuff}
+        {...rest}
     >
         <Text style={styles.stuffs}>
-            {stuff}
+            {name}
         </Text>
     </TouchableOpacity>
-
-    return <FlatList
-        data={myStuff}
-        keyExtractor={item => item}
-        renderItem={({ item }) => renderedStuff(item) }
-    />
 }
 
 const styles = StyleSheet.create({
