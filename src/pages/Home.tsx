@@ -6,6 +6,7 @@ import {
   TextInput,
   TouchableOpacity,
   FlatList,
+  Keyboard,
 } from 'react-native';
 import Button from '../components/Button';
 import Card from '../components/Card';
@@ -22,7 +23,7 @@ function Home() {
       name: newStuff,
     }
 
-    console.log('this is a test');
+    Keyboard.dismiss();
 
     setMyStuff(oldStuff => [...oldStuff, data]);
   }
@@ -55,6 +56,7 @@ function Home() {
       placeholder="input"  
       placeholderTextColor='#555'
       onChangeText={setNewStuff}
+      onSubmitEditing={(e) => addStuffHandler()}
     />
 
     <Button 
@@ -71,9 +73,10 @@ function Home() {
       keyExtractor={item => item.id}
       renderItem={({ item }) => <Card
           name={item.name}
-          onPress={() => removeStuffHandler(item.id)}
+          removeStuffHandlerById={() => removeStuffHandler(item.id)}
         />
       }
+      ItemSeparatorComponent={() => <View style={{height: 10}} />}
     />
   </View>
 }
@@ -101,7 +104,7 @@ const styles = StyleSheet.create({
   greetings: {
     marginTop: 6,
     color: '#fff',
-  }
+  },
 });
 
 export default Home;

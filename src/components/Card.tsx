@@ -1,29 +1,40 @@
 import React from 'react';
 import {
+    View,
     Text,
-    TouchableOpacity,
-    TouchableOpacityProps,
+    TouchableHighlight,
     StyleSheet,
     FlatList,
 } from 'react-native';
-import { StuffType } from '../types';
+import Icon from 'react-native-vector-icons/Foundation';
 
-interface CardType extends TouchableOpacityProps {
-    name: string,
+interface Props {
+    name: string
+    removeStuffHandlerById: () => void;
 }
 
-function Card({ name, ...rest }: CardType) {
-    return <TouchableOpacity 
-        style={styles.buttonStuff}
-        {...rest}
-    >
+function Card(props: Props) {
+    const { name, removeStuffHandlerById } = props;
+
+    return <View style={styles.card}>
         <Text style={styles.stuffs}>
             {name}
         </Text>
-    </TouchableOpacity>
+
+        <Icon name='trash' size={30} color='white' onPress={removeStuffHandlerById} />
+    </View>
 }
 
 const styles = StyleSheet.create({
+    card: {
+        flexDirection: 'row',
+        alignItems: 'center',
+        justifyContent: 'space-between',
+        backgroundColor: '#1f1e24',
+        paddingLeft: 5,
+        paddingRight: 8,
+        borderRadius: 10,
+    },
     buttonStuff: {
         backgroundColor: '#1f1e25',
         padding: 15,
