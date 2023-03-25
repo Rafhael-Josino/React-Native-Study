@@ -4,7 +4,6 @@ import {
   Text, 
   StyleSheet, 
   TextInput,
-  TouchableOpacity,
   FlatList,
   Keyboard,
 } from 'react-native';
@@ -71,8 +70,9 @@ function Home() {
     <FlatList
       data={myStuff}
       keyExtractor={item => item.id}
-      renderItem={({ item }) => <Card
+      renderItem={({ item, index }) => <Card
           name={item.name}
+          index={index}
           removeStuffHandlerById={() => removeStuffHandler(item.id)}
         />
       }

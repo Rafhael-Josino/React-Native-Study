@@ -7,16 +7,17 @@ import {
 import Icon from 'react-native-vector-icons/Foundation';
 import CheckBox from 'expo-checkbox';
 
-interface Props {
-    name: string
-    removeStuffHandlerById: () => void;
+type Props = {
+    name: string,
+    index: number,
+    removeStuffHandlerById: () => void,
 }
 
 function Card(props: Props) {
-    const { name, removeStuffHandlerById } = props;
+    const { name, index, removeStuffHandlerById } = props;
     const [toggleCheckBox, setToggleCheckbox] = useState(false);
 
-    return <View style={styles.card}>
+    return <View style={[styles.card, index % 2? styles.cardOdd : styles.cardEven]}>
         <View style={styles.title}>
             <CheckBox
                 disabled={false}
@@ -42,6 +43,12 @@ const styles = StyleSheet.create({
         paddingLeft: 5,
         paddingRight: 8,
         borderRadius: 10,
+    },
+    cardEven: {
+        backgroundColor: '#b2b0b0',
+    },
+    cardOdd: {
+        backgroundColor: '#787878',
     },
     title: {
         flexDirection: 'row',
