@@ -64,8 +64,8 @@ function Home() {
       title='Add new stuff!'
     />
 
-    <Text style={[styles.title, {marginVertical: 50}]}>
-      My Stuff
+    <Text style={[styles.title, {marginVertical: 40}]}>
+      Stuff to get:
     </Text>
 
     <FlatList
