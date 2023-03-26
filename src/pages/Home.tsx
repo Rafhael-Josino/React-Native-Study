@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState } from "react";
 import { 
   View, 
   Text, 
@@ -7,6 +7,7 @@ import {
   FlatList,
   Keyboard,
 } from 'react-native';
+import { Header } from "../components/Header";
 import Button from '../components/Button';
 import Card from '../components/Card';
 import { StuffType } from "../types";
@@ -14,7 +15,6 @@ import { StuffType } from "../types";
 function Home() {
   const [newStuff, setNewStuff] = useState('');
   const [myStuff, setMyStuff] = useState<StuffType[]>([]);
-  const [greeting, setGreeting] = useState('');
 
   const addStuffHandler = () => {
     const data = {
@@ -31,37 +31,23 @@ function Home() {
     setMyStuff(oldStuff => oldStuff.filter(stuff => stuff.id !== id))
   }
 
-  useEffect(() => {
-    const currentHour = new Date().getHours();
-
-    if (currentHour < 12) {
-      setGreeting('Good Morning!');
-    } else if (currentHour < 18){
-      setGreeting('Good Afternoon!');
-    } else {
-      setGreeting('Good Night!');
-    }
-  }, []);
-
   return <View style={styles.container}>
-    <Text style={styles.title}>React Native</Text>
+    <Header />
+    
+    <View style={{alignItems: 'center'}}>
+      <TextInput 
+        style={styles.input}
+        placeholder="input"  
+        placeholderTextColor='#555'
+        onChangeText={setNewStuff}
+        onSubmitEditing={(e) => addStuffHandler()}
+        />
 
-    <Text style={styles.greetings}>
-      {greeting}
-    </Text>
-
-    <TextInput 
-      style={styles.input}
-      placeholder="input"  
-      placeholderTextColor='#555'
-      onChangeText={setNewStuff}
-      onSubmitEditing={(e) => addStuffHandler()}
-    />
-
-    <Button 
-      onPress={addStuffHandler}
-      title='Add new stuff!'
-    />
+      <Button
+        onPress={addStuffHandler}
+        title='Add new stuff!'
+      />
+    </View>
 
     <Text style={[styles.title, {marginVertical: 40}]}>
       Stuff to get:
@@ -83,7 +69,7 @@ function Home() {
 
 const styles = StyleSheet.create({
   container: { 
-    flex: 1, 
+    flex: 1,
     backgroundColor: '#121015',
     paddingHorizontal: 30,
     paddingVertical: 50,
@@ -98,12 +84,9 @@ const styles = StyleSheet.create({
     color: '#fff',
     fontSize: 18,
     padding: 15,
-    marginTop: 30,
+    marginTop: -29,
+    width: 200,
     borderRadius: 7,
-  },
-  greetings: {
-    marginTop: 6,
-    color: '#fff',
   },
 });
 
