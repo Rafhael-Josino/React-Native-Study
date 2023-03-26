@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { 
   View, 
   Text, 
@@ -15,21 +15,31 @@ import { StuffType } from "../types";
 function Home() {
   const [newStuff, setNewStuff] = useState('');
   const [myStuff, setMyStuff] = useState<StuffType[]>([]);
+  const [emptyStuffWarning, setEmptyStuffWarning] = useState(false);
 
   const addStuffHandler = () => {
-    const data = {
-      id: String(new Date().getTime()),
-      name: newStuff,
-    }
-
     Keyboard.dismiss();
 
-    setMyStuff(oldStuff => [...oldStuff, data]);
+    if (newStuff === '') {
+      setEmptyStuffWarning(true);
+    } 
+    else {
+      const data = {
+        id: String(new Date().getTime()),
+        name: newStuff,
+      }
+         
+      setMyStuff(oldStuff => [...oldStuff, data]);
+    }
   }
 
   const removeStuffHandler = (id: string) => {
     setMyStuff(oldStuff => oldStuff.filter(stuff => stuff.id !== id))
   }
+
+  useEffect(() => {
+    setEmptyStuffWarning(false);
+  }, [newStuff]);
 
   return <View style={styles.container}>
     <Header />
@@ -47,6 +57,14 @@ function Home() {
         onPress={addStuffHandler}
         title='Add new stuff!'
       />
+
+      {emptyStuffWarning?
+          <Text style={{color: 'red'}}>
+            "Nothing" can't be added
+          </Text>
+        :
+          null
+      }
     </View>
 
     <Text style={[styles.title, {marginVertical: 40}]}>
