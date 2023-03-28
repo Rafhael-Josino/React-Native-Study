@@ -5,7 +5,11 @@ import {
     StyleSheet,
 } from 'react-native';
 
-export function Header() {
+type Props = {
+    stuffObtained: number
+}
+
+export function Header({ stuffObtained }: Props) {
     const [greeting, setGreeting] = useState('');
 
     useEffect(() => {
@@ -24,7 +28,7 @@ export function Header() {
         <Text style={styles.title}>React Native</Text>
 
         <Text style={styles.greetings}>
-            {greeting}
+            {greeting} You have {stuffObtained} stuff!
         </Text>
     </View>
 }

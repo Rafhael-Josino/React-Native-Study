@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React from 'react';
 import {
     View,
     Text,
@@ -9,23 +9,24 @@ import CheckBox from 'expo-checkbox';
 
 type Props = {
     name: string,
+    selected: boolean,
     index: number,
     removeStuffHandlerById: () => void,
+    changeStuffStatus: (index: number, status: boolean) => void
 }
 
 function Card(props: Props) {
-    const { name, index, removeStuffHandlerById } = props;
-    const [toggleCheckBox, setToggleCheckbox] = useState(false);
-
+    const { name, selected, index, removeStuffHandlerById, changeStuffStatus } = props;
+    
     return <View style={[styles.card, index % 2? styles.cardOdd : styles.cardEven]}>
         <View style={styles.title}>
             <CheckBox
                 disabled={false}
-                value={toggleCheckBox}
-                onValueChange={(newValue) => setToggleCheckbox(newValue)}
+                value={selected}
+                onValueChange={(newValue) => changeStuffStatus(index, newValue)}
             />
             
-            <Text style={[styles.stuffs, toggleCheckBox? styles.stuffGotten : {}]}>
+            <Text style={[styles.stuffs, selected? styles.stuffObtained : {}]}>
                 {name}
             </Text>
         </View>
@@ -67,7 +68,7 @@ const styles = StyleSheet.create({
     fontSize: 22,
     fontWeight: 'bold',
     },
-    stuffGotten: {
+    stuffObtained: {
         textDecorationLine: 'line-through',
         color: 'green',
     }

@@ -15,7 +15,13 @@ import { StuffType } from "../types";
 function Home() {
   const [newStuff, setNewStuff] = useState('');
   const [myStuff, setMyStuff] = useState<StuffType[]>([]);
+  const [stuffObtained, setStuffObtained] = useState(0);
   const [emptyStuffWarning, setEmptyStuffWarning] = useState(false);
+
+  
+  /**
+   * Handler functions
+   */
 
   const addStuffHandler = () => {
     Keyboard.dismiss();
@@ -27,6 +33,7 @@ function Home() {
       const data = {
         id: String(new Date().getTime()),
         name: newStuff,
+        selected: false,
       }
          
       setMyStuff(oldStuff => [...oldStuff, data]);
@@ -37,12 +44,32 @@ function Home() {
     setMyStuff(oldStuff => oldStuff.filter(stuff => stuff.id !== id))
   }
 
+  const changeStuffStatus = (index: number, status: boolean) => {
+    const { id, name } = myStuff[index];
+
+    setMyStuff(oldStuff => [
+      ...oldStuff.slice(0,index),
+      {id, name, selected: status},
+      ...oldStuff.slice(index+1)
+    ]);
+  }
+
+  /**
+   * Use Effect
+   */
+
   useEffect(() => {
     setEmptyStuffWarning(false);
   }, [newStuff]);
 
+  useEffect(() => {
+    setStuffObtained(myStuff.reduce((sum, stuff) => {
+      return sum + (stuff.selected? 1 : 0);
+    }, 0));
+  },  [myStuff])
+
   return <View style={styles.container}>
-    <Header />
+    <Header stuffObtained={stuffObtained}/>
     
     <View style={{alignItems: 'center'}}>
       <TextInput 
@@ -76,8 +103,10 @@ function Home() {
       keyExtractor={item => item.id}
       renderItem={({ item, index }) => <Card
           name={item.name}
+          selected={item.selected}
           index={index}
           removeStuffHandlerById={() => removeStuffHandler(item.id)}
+          changeStuffStatus={changeStuffStatus}
         />
       }
       ItemSeparatorComponent={() => <View style={{height: 10}} />}
