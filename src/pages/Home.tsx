@@ -16,7 +16,7 @@ function Home() {
   const [newStuff, setNewStuff] = useState('');
   const [myStuff, setMyStuff] = useState<StuffType[]>([]);
   const [stuffObtained, setStuffObtained] = useState(0);
-  const [emptyStuffWarning, setEmptyStuffWarning] = useState(false);
+  const [warning, setWarning] = useState('');
 
   
   /**
@@ -27,8 +27,11 @@ function Home() {
     Keyboard.dismiss();
 
     if (newStuff === '') {
-      setEmptyStuffWarning(true);
-    } 
+      setWarning(`"Nothing" can't be added`);
+    }
+    else if (myStuff.some(stuff => stuff.name === newStuff)) {
+      setWarning(`Stuff already in the list`);
+    }
     else {
       const data = {
         id: String(new Date().getTime()),
@@ -59,7 +62,7 @@ function Home() {
    */
 
   useEffect(() => {
-    setEmptyStuffWarning(false);
+    setWarning('');
   }, [newStuff]);
 
   useEffect(() => {
@@ -67,7 +70,7 @@ function Home() {
       return sum + (stuff.selected? 1 : 0);
     }, 0));
   },  [myStuff])
-
+  
   return <View style={styles.container}>
     <Header stuffObtained={stuffObtained}/>
     
@@ -89,13 +92,8 @@ function Home() {
         />
       </View>
 
-      {emptyStuffWarning?
-          <Text style={{color: 'red'}}>
-            "Nothing" can't be added
-          </Text>
-        :
-          null
-      }
+      <Text style={{color: 'red'}}>{warning}</Text>
+        
     </View>
 
     <Text style={[styles.title, {marginVertical: 40}]}>
