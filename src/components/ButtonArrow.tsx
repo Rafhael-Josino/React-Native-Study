@@ -7,10 +7,10 @@ import {
 } from 'react-native';
 
 interface MyButtonType extends TouchableOpacityProps {
-  title: string,
+  title: '>' | '<';
 }
 
-function Button({ title, ...rest }: MyButtonType) {
+export default function ButtonArrow({ title, ...rest }: MyButtonType) {
     return <TouchableOpacity 
       style={styles.button} 
       activeOpacity={0.7}
@@ -24,16 +24,14 @@ function Button({ title, ...rest }: MyButtonType) {
 
 const styles = StyleSheet.create({
     button: {
-        backgroundColor: '#a370f7',
+        backgroundColor: '#1f1e24',
         padding: 15,
-        borderRadius: 7,
+        borderTopRightRadius: 7,
+        borderBottomRightRadius: 7,
         alignItems: 'center',
-        marginTop: 20,
-        width: 200,
       },
       buttonText: {
-        color: '#fff'
+        fontSize: 20,
+        color: '#a370f7'
       },
 });
-
-export default Button;

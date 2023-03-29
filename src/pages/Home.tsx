@@ -8,7 +8,7 @@ import {
   Keyboard,
 } from 'react-native';
 import { Header } from "../components/Header";
-import Button from '../components/Button';
+import ButtonArrow from '../components/ButtonArrow';
 import Card from '../components/Card';
 import { StuffType } from "../types";
 
@@ -72,18 +72,22 @@ function Home() {
     <Header stuffObtained={stuffObtained}/>
     
     <View style={{alignItems: 'center'}}>
-      <TextInput 
-        style={styles.input}
-        placeholder="input"  
-        placeholderTextColor='#555'
-        onChangeText={setNewStuff}
-        onSubmitEditing={(e) => addStuffHandler()}
+      <View style={styles.inputContainer}>
+        <TextInput 
+          style={styles.input}
+          placeholder="input"  
+          placeholderTextColor='#555'
+          onChangeText={setNewStuff}
+          onSubmitEditing={(e) => addStuffHandler()}
         />
 
-      <Button
-        onPress={addStuffHandler}
-        title='Add new stuff!'
-      />
+        <View style={styles.separator} />
+
+        <ButtonArrow
+          onPress={addStuffHandler}
+          title='<'
+        />
+      </View>
 
       {emptyStuffWarning?
           <Text style={{color: 'red'}}>
@@ -126,15 +130,25 @@ const styles = StyleSheet.create({
     fontSize: 24,
     fontWeight: 'bold',
   },
+  inputContainer: {
+    flexDirection: 'row',
+    marginTop: -29,
+    borderRadius: 7,
+  },
   input: {
     backgroundColor: '#1f1e24',
     color: '#fff',
     fontSize: 18,
     padding: 15,
-    marginTop: -29,
     width: 200,
-    borderRadius: 7,
+    borderTopLeftRadius: 7,
+    borderBottomLeftRadius: 7,
+    //borderColor: '#1f1e24',
   },
+  separator: {
+    width: 1,
+    backgroundColor: '#a370f7'
+  }
 });
 
 export default Home;
