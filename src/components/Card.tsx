@@ -6,17 +6,18 @@ import {
 } from 'react-native';
 import Icon from 'react-native-vector-icons/Foundation';
 import CheckBox from 'expo-checkbox';
+import { StuffType } from '../types';
 
 type Props = {
-    name: string,
-    selected: boolean,
+    stuff: StuffType,
     index: number,
-    removeStuffHandlerById: () => void,
+    setSelectedStuffHandler: (id: string) => void
     changeStuffStatus: (index: number, status: boolean) => void
 }
 
 function Card(props: Props) {
-    const { name, selected, index, removeStuffHandlerById, changeStuffStatus } = props;
+    const { stuff, index, setSelectedStuffHandler, changeStuffStatus } = props;
+    const { name, selected, id } = stuff;
     
     return <View style={[styles.card, index % 2? styles.cardOdd : styles.cardEven]}>
         <View style={styles.title}>
@@ -31,7 +32,11 @@ function Card(props: Props) {
             </Text>
         </View>
 
-        <Icon name='trash' size={30} color='white' onPress={removeStuffHandlerById} />
+        <Icon 
+            name='trash' 
+            size={30} 
+            color='white' 
+            onPress={() => setSelectedStuffHandler(id)} />
     </View>
 }
 

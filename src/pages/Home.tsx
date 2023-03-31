@@ -10,6 +10,7 @@ import {
 import { Header } from "../components/Header";
 import ButtonArrow from '../components/ButtonArrow';
 import Card from '../components/Card';
+import ModalComponent from "../components/DeleteModal";
 import { StuffType } from "../types";
 
 function Home() {
@@ -17,6 +18,7 @@ function Home() {
   const [myStuff, setMyStuff] = useState<StuffType[]>([]);
   const [stuffObtained, setStuffObtained] = useState(0);
   const [warning, setWarning] = useState('');
+  const [selectedStuffId, setSelectedStuffId] = useState('');
 
   
   /**
@@ -43,8 +45,12 @@ function Home() {
     }
   }
 
-  const removeStuffHandler = (id: string) => {
-    setMyStuff(oldStuff => oldStuff.filter(stuff => stuff.id !== id))
+  const openDeleteModal = (id: string) => {
+    setSelectedStuffId(id);
+  }
+  
+  const deleteStuffById = (id: string) => {
+    setMyStuff(oldStuff => oldStuff.filter(stuff => stuff.id !== id));
   }
 
   const changeStuffStatus = (index: number, status: boolean) => {
@@ -57,6 +63,10 @@ function Home() {
     ]);
   }
 
+  const setSelectedStuffHandler = (id: string) => {
+    setSelectedStuffId(id);
+  }
+
   /**
    * Use Effect
    */
@@ -64,6 +74,10 @@ function Home() {
   useEffect(() => {
     setWarning('');
   }, [newStuff]);
+  
+  useEffect(() => {
+    setSelectedStuffId('');
+  },  [myStuff]);
 
   useEffect(() => {
     setStuffObtained(myStuff.reduce((sum, stuff) => {
@@ -71,7 +85,14 @@ function Home() {
     }, 0));
   },  [myStuff])
   
+
   return <View style={styles.container}>
+    <ModalComponent 
+      selectedStuffId={selectedStuffId}
+      setSelectedStuffHandler={setSelectedStuffHandler}
+      deleteStuffById={deleteStuffById}
+    />
+
     <Header stuffObtained={stuffObtained}/>
     
     <View style={{alignItems: 'center'}}>
@@ -104,10 +125,9 @@ function Home() {
       data={myStuff}
       keyExtractor={item => item.id}
       renderItem={({ item, index }) => <Card
-          name={item.name}
-          selected={item.selected}
+          stuff={item}
           index={index}
-          removeStuffHandlerById={() => removeStuffHandler(item.id)}
+          setSelectedStuffHandler={setSelectedStuffHandler}
           changeStuffStatus={changeStuffStatus}
         />
       }
