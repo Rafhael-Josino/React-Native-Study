@@ -45,10 +45,6 @@ function Home() {
     }
   }
 
-  const openDeleteModal = (id: string) => {
-    setSelectedStuffId(id);
-  }
-  
   const deleteStuffById = (id: string) => {
     setMyStuff(oldStuff => oldStuff.filter(stuff => stuff.id !== id));
   }
@@ -63,6 +59,21 @@ function Home() {
     ]);
   }
 
+  const changeStuffName = (index: number, name: string) => {
+    if (myStuff.some(stuff => stuff.name === name)) {
+      setWarning(`Stuff already in the list`);
+    } 
+    else {   
+      const { id, selected } = myStuff[index];
+      
+      setMyStuff(oldStuff => [
+        ...oldStuff.slice(0,index),
+        {id, name, selected},
+        ...oldStuff.slice(index+1)
+      ]);
+    }
+  }
+
   const setSelectedStuffHandler = (id: string) => {
     setSelectedStuffId(id);
   }
@@ -73,7 +84,7 @@ function Home() {
 
   useEffect(() => {
     setWarning('');
-  }, [newStuff]);
+  }, [newStuff, myStuff]);
   
   useEffect(() => {
     setSelectedStuffId('');
@@ -117,7 +128,7 @@ function Home() {
         
     </View>
 
-    <Text style={[styles.title, {marginVertical: 40}]}>
+    <Text style={[styles.title, {marginVertical: 10}]}>
       Stuff to get:
     </Text>
 
@@ -129,6 +140,7 @@ function Home() {
           index={index}
           setSelectedStuffHandler={setSelectedStuffHandler}
           changeStuffStatus={changeStuffStatus}
+          changeStuffName={changeStuffName}
         />
       }
       ItemSeparatorComponent={() => <View style={{height: 10}} />}
@@ -140,13 +152,12 @@ const styles = StyleSheet.create({
   container: { 
     flex: 1,
     backgroundColor: '#121015',
-    paddingHorizontal: 30,
-    paddingVertical: 50,
   },
   title: {
     color: '#fff',
     fontSize: 24,
     fontWeight: 'bold',
+    marginLeft: 15,
   },
   inputContainer: {
     flexDirection: 'row',
@@ -158,7 +169,7 @@ const styles = StyleSheet.create({
     color: '#fff',
     fontSize: 18,
     padding: 15,
-    width: 200,
+    width: 250,
     borderTopLeftRadius: 7,
     borderBottomLeftRadius: 7,
     //borderColor: '#1f1e24',

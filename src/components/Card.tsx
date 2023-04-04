@@ -1,5 +1,6 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import {
+    Keyboard,
     View,
     Text,
     TextInput,
@@ -7,7 +8,6 @@ import {
 } from 'react-native';
 import CheckBox from 'expo-checkbox';
 import { Foundation } from '@expo/vector-icons';
-import { AntDesign } from '@expo/vector-icons';
 import { FontAwesome } from '@expo/vector-icons';
 import { StuffType } from '../types';
 
@@ -16,15 +16,31 @@ type Props = {
     index: number,
     setSelectedStuffHandler: (id: string) => void
     changeStuffStatus: (index: number, status: boolean) => void
+    changeStuffName: (index: number, name: string) => void
 }
 
 function Card(props: Props) {
-    const { stuff, index, setSelectedStuffHandler, changeStuffStatus } = props;
+    const { stuff, index, setSelectedStuffHandler, changeStuffStatus, changeStuffName } = props;
     const { name, selected, id } = stuff;
     const [editActive, setEditActive] = useState(false);
-    const [stuffName, setStuffName] = useState(name);
+    const [newName, setNewName] = useState(name);
 
     
+    useEffect(() => {
+        const hideSubscription = Keyboard.addListener('keyboardDidHide', () => {
+            setEditActive(false);
+        });
+      
+        return () => {
+            hideSubscription.remove();
+        };
+    }, [])
+
+    useEffect(() => {
+        if (!editActive) setNewName(name);
+    }, [editActive])
+
+
     return <View style={[styles.card, index % 2? styles.cardOdd : styles.cardEven]}>
         <View style={styles.title}>
             <CheckBox
@@ -37,25 +53,34 @@ function Card(props: Props) {
                 editActive?
                     <TextInput 
                         style={styles.editView}
-                        onChangeText={setStuffName}
-                        value={stuffName}
+                        value={newName}
+                        onChangeText={setNewName}
+                        onSubmitEditing={(e) => {if (name !== newName) changeStuffName(index, newName)}}
+                        autoFocus={true}
                     />
                 :
                     <Text style={[styles.stuffs, selected? styles.stuffObtained : {}]}>
                         {name}
                     </Text>    
-            }
-
-            
+            }      
         </View>
 
         <View style={styles.title}>
-            <FontAwesome 
-                name="edit" 
-                size={30} 
-                color="white"
-                onPress={() => setEditActive(!editActive)}
-                />
+            {
+                editActive?
+                    <FontAwesome
+                        name='stop'
+                        size={30}
+                        color='white'
+                    />
+                :
+                    <FontAwesome 
+                        name="edit" 
+                        size={30} 
+                        color="white"
+                        onPress={() => setEditActive(!editActive)}
+                    />
+            }
 
             <Foundation
                 name='trash' 
@@ -73,7 +98,7 @@ const styles = StyleSheet.create({
         alignItems: 'center',
         justifyContent: 'space-between',
         backgroundColor: '#1f1e24',
-        paddingLeft: 5,
+        paddingLeft: 15,
         paddingRight: 8,
         borderRadius: 10,
     },
@@ -86,7 +111,7 @@ const styles = StyleSheet.create({
     title: {
         flexDirection: 'row',
         alignItems: 'center',
-        columnGap: 10,
+        columnGap: 20,
     },
     buttonStuff: {
         backgroundColor: '#1f1e25',
@@ -105,8 +130,9 @@ const styles = StyleSheet.create({
         color: 'green',
     },
     editView: {
-        backgroundColor: 'gray',
+        backgroundColor: '#666',
         color: 'white',
+        fontSize: 22,
     }
 })
 
