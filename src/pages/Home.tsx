@@ -22,7 +22,7 @@ function Home() {
 
   
   /**
-   * Handler functions
+   * Handlers
    */
 
   const addStuffHandler = () => {
@@ -88,9 +88,6 @@ function Home() {
   
   useEffect(() => {
     setSelectedStuffId('');
-  },  [myStuff]);
-
-  useEffect(() => {
     setStuffObtained(myStuff.reduce((sum, stuff) => {
       return sum + (stuff.selected? 1 : 0);
     }, 0));
@@ -172,7 +169,6 @@ const styles = StyleSheet.create({
     width: 250,
     borderTopLeftRadius: 7,
     borderBottomLeftRadius: 7,
-    //borderColor: '#1f1e24',
   },
   separator: {
     width: 1,

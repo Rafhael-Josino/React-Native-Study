@@ -87,7 +87,7 @@ function Card(props: Props) {
                 size={30} 
                 color='white' 
                 onPress={() => setSelectedStuffHandler(id)} 
-                />
+            />
         </View>
     </View>
 }

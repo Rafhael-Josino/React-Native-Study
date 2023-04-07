@@ -1,6 +1,5 @@
 import React from 'react';
 import { 
-    Alert,
     Modal,
     View,
     Text,
@@ -22,7 +21,6 @@ export default function DeleteModal(props: Props) {
         transparent={true}
         visible={selectedStuffId !== ''}
         onRequestClose={() => {
-            Alert.alert('Modal has been closed');
             setSelectedStuffHandler('')
         }}
     >
